@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_14_163123) do
+ActiveRecord::Schema.define(version: 2023_02_14_180041) do
 
   create_table "bills", force: :cascade do |t|
     t.string "bill_id"
@@ -21,16 +21,22 @@ ActiveRecord::Schema.define(version: 2023_02_14_163123) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.string "commentable_id"
     t.string "commentable_type"
+    t.integer "commentable_id"
     t.string "content"
     t.string "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
   end
 
   create_table "follows", force: :cascade do |t|
-    t.string "followable_id"
     t.string "followable_type"
+    t.integer "followable_id"
     t.integer "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["followable_type", "followable_id"], name: "index_follows_on_followable"
   end
 
   create_table "legislators", force: :cascade do |t|
@@ -58,9 +64,25 @@ ActiveRecord::Schema.define(version: 2023_02_14_163123) do
 
   create_table "reactions", force: :cascade do |t|
     t.string "reactable_type"
-    t.string "reactable_id"
+    t.integer "reactable_id"
     t.integer "value"
     t.integer "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["reactable_type", "reactable_id"], name: "index_reactions_on_reactable"
+  end
+
+  create_table "subjects", force: :cascade do |t|
+    t.string "name"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "bill_id"
+    t.integer "subject_id"
+    t.index ["bill_id"], name: "index_tags_on_bill_id"
+    t.index ["subject_id"], name: "index_tags_on_subject_id"
+    t.index ["user_id"], name: "index_tags_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
