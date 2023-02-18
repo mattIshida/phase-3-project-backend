@@ -70,7 +70,6 @@ end
 def create_subjects vote, bill
     url = vote[:api_uri].gsub(/\.json/, "/subjects.json")
     data = fetch_json(url)["results"].first["subjects"]
-    pp data
     data.each do |s|
         subject = Subject.find_or_create_by(name: s["name"])
         Tag.find_or_create_by(subject_id: subject.id, bill_id: bill.id)
